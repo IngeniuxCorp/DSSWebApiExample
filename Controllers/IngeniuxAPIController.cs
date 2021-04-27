@@ -6,10 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace Ingeniux.Runtime.Controllers
 {
 	[RoutePrefix("api")]
+    [ApiExplorerSettings(IgnoreApi = false)]
     public class IngeniuxAPIController : ApiController
     {
         public IngeniuxAPIController():base()
@@ -19,6 +21,7 @@ namespace Ingeniux.Runtime.Controllers
 
         [IGXWebApiCache()]
         [Route("content/{pageURL?}")]
+        [ResponseType(typeof(PageModel))]
         public PageModel GetPage(string pageUrl="/")
         {
             //System.Diagnostics.Debugger.Launch();

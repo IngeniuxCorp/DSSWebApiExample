@@ -112,12 +112,12 @@ namespace Ingeniux.Runtime
 
 		protected void Application_PostAcquireRequestState()
 		{
-			var requestTelemetry = Context.GetRequestTelemetry();
+			//var requestTelemetry = Context.GetRequestTelemetry();
 
-			if (HttpContext.Current.Session != null && requestTelemetry != null && string.IsNullOrEmpty(requestTelemetry.Context.User.Id))
-			{
-				requestTelemetry.Context.User.Id = Session.SessionID;
-			}
+			//if (HttpContext.Current.Session != null && requestTelemetry != null && string.IsNullOrEmpty(requestTelemetry.Context.User.Id))
+			//{
+			//	requestTelemetry.Context.User.Id = Session.SessionID;
+			//}
 		}
 	}
 }

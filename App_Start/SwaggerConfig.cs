@@ -2,11 +2,41 @@ using System.Web.Http;
 using WebActivatorEx;
 using Ingeniux.Runtime;
 using Swashbuckle.Application;
+using Swashbuckle.Swagger;
+using System.Web.Http.Description;
+using System;
+using System.Linq;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace Ingeniux.Runtime
 {
+    internal class SwaggerFilterOutControllers : IDocumentFilter
+    {
+        void IDocumentFilter.Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
+        {
+            foreach (ApiDescription apiDescription in apiExplorer.ApiDescriptions)
+            {
+
+                if (!apiDescription.RelativePath.StartsWith("api/content")
+                    )
+                {
+                    swaggerDoc.paths.Remove("/" + apiDescription.RelativePath.TrimEnd('/'));
+                }
+            }
+        }
+    }
+
+    public class SwaggerExcludeSchemaFilter : ISchemaFilter
+    {
+
+        public void Apply(Schema schema, SchemaRegistry schemaRegistry, Type type)
+        {
+            return;
+        }
+    }
+
+
     public class SwaggerConfig
     {
         public static void Register()
@@ -16,6 +46,8 @@ namespace Ingeniux.Runtime
             GlobalConfiguration.Configuration
                 .EnableSwagger(c =>
                     {
+                        c.DocumentFilter<SwaggerFilterOutControllers>();
+                        //c.SchemaFilter<SwaggerExcludeSchemaFilter>();
                         // By default, the service root url is inferred from the request used to access the docs.
                         // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
                         // resolve correctly. You can workaround this by providing your own code to determine the root URL.
@@ -33,7 +65,7 @@ namespace Ingeniux.Runtime
                         // additional fields by chaining methods off SingleApiVersion.
                         //
                         c.SingleApiVersion("v1", "Ingeniux.Runtime");
-
+                        c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                         // If you want the output Swagger docs to be indented properly, enable the "PrettyPrint" option.
                         //
                         //c.PrettyPrint();
@@ -61,7 +93,7 @@ namespace Ingeniux.Runtime
                         //c.BasicAuth("basic")
                         //    .Description("Basic HTTP Authentication");
                         //
-						// NOTE: You must also configure 'EnableApiKeySupport' below in the SwaggerUI section
+                        // NOTE: You must also configure 'EnableApiKeySupport' below in the SwaggerUI section
                         //c.ApiKey("apiKey")
                         //    .Description("API Key Authentication")
                         //    .Name("apiKey")
@@ -179,6 +211,7 @@ namespace Ingeniux.Runtime
                     })
                 .EnableSwaggerUi(c =>
                     {
+                         
                         // Use the "DocumentTitle" option to change the Document title.
                         // Very helpful when you have multiple Swagger pages open, to tell them apart.
                         //
