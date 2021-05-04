@@ -25,7 +25,7 @@ namespace Ingeniux.Runtime.Controllers
         public PageModel GetPage(string pageUrl="/")
         {
             //System.Diagnostics.Debugger.Launch();
-            if (!pageUrl.StartsWith("/"))
+            if (!pageUrl.StartsWith("/") && !pageUrl.IsXId())
             {
                 pageUrl = $"/{pageUrl}";
             }
