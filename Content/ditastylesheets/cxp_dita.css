@@ -1,0 +1,277 @@
+pre {
+    padding: 0.5em;
+    background-color: #EEE;
+    overflow: auto;
+    max-height: 600px;
+    margin: .5em 0 .5em .5em;
+}
+
+
+/*  OXYGEN PATCH  EXM-31508  - window titles and UI controls should be bold. */
+.uicontrol, .wintitle {
+    font-weight: bold;
+}
+
+
+/* OXYGEN PATCH START - EXM-18138 - Insert space between button image and button name. */
+span.uicontrol > img {
+    padding-right: 5px;
+}
+/* OXYGEN PATCH END - EXM-18138 */
+
+/* OXYGEN PATCH START EXM-17248 - Center figure captions. */
+div.fignone p.figcap {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    padding: 2px 10px 5px 10px;
+}
+
+div.fignone p.figcapcenter {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px 10px 5px 10px;
+}
+
+div.fignone p.figcapright {
+    display: block;
+    text-align: right;
+    font-weight: bold;
+    padding: 2px 10px 5px 10px;
+}
+
+div.fignone p.figcapjustify {
+    display: block;
+    text-align: justify;
+    font-weight: bold;
+    padding: 2px 10px 5px 10px;
+}
+
+div.fignone img {
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+/* OXYGEN PATCH END EXM-17248 */
+
+
+
+/* Conforms to the DITA spec. The HTML uses middle instead of top. */
+.simpletable td,
+.table td {
+    vertical-align: top;
+}
+
+
+
+/*
+ * ------------------------------------------------------------------
+ *  
+ * Topic content
+ * 
+ */
+.wh_topic_content .related-links:empty {
+    display: none;
+}
+
+.sectiontitle {
+    /* EXM-37168: The section title should have the same color as the rest of the content. */
+    color: inherit;
+}
+
+/*
+ * Topic titles & subtitles
+ */
+.topictitle1 {
+    font-size: 2em;
+    margin-bottom: 1em;
+    font-weight: 400;
+}
+
+.topictitle2 {
+    margin: 1.5em 0 .5em 0;
+    font-size: 1.7em;
+    font-weight: 400;
+}
+
+.topictitle3 {
+    margin: 1.3em 0 .4em 0;
+    font-size: 1.4em;
+    font-weight: 300;
+}
+
+.topictitle4 {
+    margin: 1.2em 0 .3em 0;
+    font-size: 1.1em;
+    font-weight: 400;
+}
+
+.topictitle5, .topictitle6 {
+    margin: 1.1em 0 .3em 0;
+    font-size: 1em;
+    font-weight: 300;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+@media screen {
+    .topictitle1,
+    .topictitle2,
+    .topictitle3,
+    .topictitle4,
+    .topictitle5,
+    .topictitle6 {
+        word-break: break-word;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+}
+
+.wh_child_links .olchildlinks,
+.wh_child_links .ullinks,
+.wh_child_links li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.wh_child_links strong {
+    font-weight: normal;
+}
+
+#dita-content span.systemoutput {
+    font-family: "Courier New",monospace;
+    font-weight: bold;
+}
+
+#dita-content span.filepath {
+    font-style: italic;
+}
+
+#dita-content span.userinput {
+    font-style:italic;
+}
+
+#dita-content span.codeph {
+    font-family: "Courier New",monospace;
+    font-weight: bold;
+}
+
+#dita-content span.apiname {
+    font-family: "Courier New",monospace;
+    font-weight: bold;
+}
+#dita-content span.parmname {
+    font-weight: bold;
+}
+
+#dita-content .image {
+    max-width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+}
+
+#dita-content .image {
+    max-width: 100%;
+}
+
+#dita-content code {
+    word-break: break-word;
+}
+
+#dita-content .note {
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+#dita-content span.term {
+    font-style: italic;
+
+}
+
+#dita-content .sectiontitle {
+    color: inherit;
+    margin: 0 0 20px;
+}
+
+#dita-content code.xmlatt {
+    font-style:italic;
+}
+#dita-content code.xmlelement {
+    font-weight: bold;
+}
+#dita-content span.varname {
+    font-style:italic;
+}
+
+#dita-content span.note__title {
+    font-weight: bold;  
+}
+
+#dita-content pre samp.ph.msgph {
+    font-style: normal;
+}
+
+#dita-content samp.ph.msgph {
+    font-style: italic;
+}
+
+/*div.note > span.note__title {
+    background-repeat: no-repeat;
+    background-image: url("../img/note.svg") !important;
+    font-weight: bold;
+}
+
+span.note__title,
+*[dir] *[dir='ltr'] span.note__title,
+*[dir] *[dir] *[dir='ltr'] span.note__title,
+*[dir] *[dir] *[dir] *[dir='ltr'] span.note__title,
+*[dir] *[dir] *[dir] *[dir] *[dir='ltr'] span.note__title {
+    padding: 4px 4px 4px 23px;
+    background-position: left;
+}
+
+    span.note__title[dir='rtl'],
+    *[dir] *[dir='rtl'] span.note__title,
+    *[dir] *[dir] *[dir='rtl'] span.note__title,
+    *[dir] *[dir] *[dir] *[dir='rtl'] span.note__title,
+    *[dir] *[dir] *[dir] *[dir] *[dir='rtl'] span.note__title {
+        padding: 4px 23px 4px 4px;
+        background-position: right;
+    }
+
+
+div.warning > span.note__title {
+    background-image: url("../img/warning.svg") !important;
+}
+
+div.caution > span.note__title {
+    background-image: url("../img/caution.svg") !important;
+}
+
+div.trouble > span.note__title {
+    background-image: url("../img/troubleshooting.svg") !important;
+}
+
+div.important > span.note__title,
+div.attention > span.note__title,
+div.notice > span.note__title {
+    background-image: url("../img/attention.svg") !important;
+}
+
+div.remember > span.note__title {
+    background-image: url("../img/remember.svg") !important;
+}
+
+div.restriction > span.note__title {
+    background-image: url("../img/restriction.svg") !important;
+}
+
+div.danger > span.note__title {
+    background-image: url("../img/danger.svg") !important;
+}
+
+div.tip > span.note__title {
+    background-image: url("../img/tip.svg") !important;
+}*/
