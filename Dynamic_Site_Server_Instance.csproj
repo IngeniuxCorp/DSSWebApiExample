@@ -385,6 +385,7 @@
     <Content Include="Content\bg-body.png" />
     <Content Include="Content\ditastylesheets\cxp_dita.css" />
     <Content Include="Content\ditastylesheets\ditaRender-cxp.xsl" />
+    <Content Include="Content\ditastylesheets\ditaRender-dolby.xsl" />
     <Content Include="Content\ditastylesheets\img\Caution.png" />
     <Content Include="Content\ditastylesheets\img\Important.png" />
     <Content Include="Content\ditastylesheets\img\Tip.png" />

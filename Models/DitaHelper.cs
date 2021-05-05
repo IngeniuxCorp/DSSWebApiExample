@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,22 +13,29 @@ using System.Xml.Xsl;
 
 namespace Ingeniux.Runtime.Models
 {
-	public class DitaHelper
-	{
+    public class DitaHelper
+    {
 
         public static string GetTransformedXML(ICMSPage page)
         {
+
             ICMSElement ditaXML = page.Element("Content", "");
 
-            String xsltFilePath = HostingEnvironment.MapPath("~/Content/ditastylesheets/ditaRender-cxp.xsl");
+            String xsltFilePath = HostingEnvironment.MapPath("~/Content/ditastylesheets/ditaRender-dolby.xsl");
             String stylesheetFolderPath = HostingEnvironment.MapPath("~/Content/ditastylesheets/");
             ICMSElement ditaContentNode = ditaXML.Elements().FirstOrDefault(c => c.RootElementName != "IGX_XELE_DocType");
 
             String insertContent = ditaContentNode != null ? ditaContentNode.Content.ToString() : ditaXML != null && !string.IsNullOrWhiteSpace(ditaXML.Value) ? ditaXML.Value : "";
+
             String transformedContent = insertContent;
 
             //String mapViewMode = !String.IsNullOrWhiteSpace(ViewBag.LeftNavMap) ? ViewBag.LeftNavMap : "";
             String mapViewMode = "tocwithdesc";
+            if (page.ViewName == "DitaBookmap")
+            {
+
+                mapViewMode = "SinglePageMap";
+            }
 
             if (File.Exists(xsltFilePath) && !string.IsNullOrWhiteSpace(insertContent) && insertContent != "Xml Element Error: Invalid xml: Root element is missing.")
             {
@@ -76,6 +84,91 @@ namespace Ingeniux.Runtime.Models
 
 
             return results.ToString();
+        }
+
+        internal static string ExpandInternalTabs(string transformedString, CMSPageFactory pageFactory, HttpRequestBase _request)
+        {
+            //parse it into an XDocument
+            var doc = new HtmlDocument();
+            doc.LoadHtml(transformedString);
+
+            if (doc != null)
+            {
+                //tab-insert
+                //accordion-insert
+                // tabs
+                IEnumerable<HtmlNode> tabNodes = doc.DocumentNode.Descendants(0).Where(n => n.HasClass("tab-insert"));
+                if (tabNodes != null && tabNodes.Any())
+                {
+                    foreach (var t in tabNodes)
+                    {
+                        var dataID = t.GetAttributeValue("data-id", "");
+                        if (!string.IsNullOrWhiteSpace(dataID))
+                        {
+                            ICMSPage tabPage;
+                            if (!dataID.StartsWith("/") && !dataID.IsXId())
+                            {
+                                dataID = $"/{dataID}";
+                            }
+                            if (!dataID.IsXId())
+                            {
+                                tabPage = pageFactory.GetPageByPath(_request, dataID) as ICMSPage;
+                            }
+                            else
+                            {
+                                tabPage = pageFactory.GetPage(_request, dataID) as ICMSPage;
+                            }
+                            if (tabPage != null)
+                            {
+                                var innerTransform = GetTransformedXML(tabPage);
+
+                                //t.ReplaceChild(HtmlTextNode.CreateNode(innerTransform), t.FirstChild);
+                                t.PrependChild(HtmlTextNode.CreateNode(innerTransform));
+                            }
+
+                        }
+                    }
+                }
+
+                IEnumerable<HtmlNode> accordionNodes = doc.DocumentNode.Descendants(0).Where(n => n.HasClass("accordion-insert"));
+                if (accordionNodes != null && accordionNodes.Any())
+                {
+                    foreach (var a in accordionNodes)
+                    {
+                        var dataID = a.GetAttributeValue("data-id", "");
+
+                        if (!string.IsNullOrWhiteSpace(dataID))
+                        {
+                            ICMSPage accordionPage;
+                            if (!dataID.StartsWith("/") && !dataID.IsXId())
+                            {
+                                dataID = $"/{dataID}";
+                            }
+                            if (!dataID.IsXId())
+                            {
+                                accordionPage = pageFactory.GetPageByPath(_request, dataID) as ICMSPage;
+                            }
+                            else
+                            {
+                                accordionPage = pageFactory.GetPage(_request, dataID) as ICMSPage;
+                            }
+                            if (accordionPage != null)
+                            {
+                                var innerTransform = GetTransformedXML(accordionPage);
+
+                                a.PrependChild(HtmlTextNode.CreateNode(innerTransform));
+                            }
+
+                        }
+                    }
+                }
+
+                return doc.DocumentNode.OuterHtml;
+            }
+            else
+            {
+                return transformedString;
+            }
         }
 
         public static string ReplaceImageAssetPaths(string inputXml, ICMSPage page)

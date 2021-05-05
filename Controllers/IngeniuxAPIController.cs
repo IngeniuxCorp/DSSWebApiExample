@@ -73,6 +73,12 @@ namespace Ingeniux.Runtime.Controllers
                 //var ditaContent = contentEle != null ? contentEle.Value : "";                
                 var transformedString = DitaHelper.GetTransformedXML(page);
 
+                // expand internal tabs/accordions
+                if (!string.IsNullOrWhiteSpace(transformedString))
+                {
+                    transformedString = DitaHelper.ExpandInternalTabs(transformedString, pageFactory, _request);
+                }
+
                 if (!string.IsNullOrWhiteSpace(transformedString))
                 {
                     var pageElements = pageModel.Elements.ToList();
