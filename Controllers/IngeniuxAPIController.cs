@@ -65,6 +65,28 @@ namespace Ingeniux.Runtime.Controllers
                     .Select(e => new ElementModel(e)).Where(e => !eleExceptions.Contains(e.Name))
             };
 
+            // check for page Element 'Content'
+            if (pageModel.Elements.Where(elt => elt.Name == "Content").Any())
+            {
+                // convert with XSLT Stylesheet and add to dictionary
+                //var contentEle = pageModel.Elements.Where(elt => elt.Name == "Content").Single();
+                //var ditaContent = contentEle != null ? contentEle.Value : "";                
+                var transformedString = DitaHelper.GetTransformedXML(page);
+
+                if (!string.IsNullOrWhiteSpace(transformedString))
+                {
+                    var pageElements = pageModel.Elements.ToList();
+
+                    var contentEle = new ElementModel(page.Element("Content"));
+                    contentEle.Value = transformedString;
+                    contentEle.Children = Enumerable.Empty<ElementModel>();
+                    // get index of current Content ele
+                    pageElements[pageElements.FindIndex(elt => elt.Name == "Content")] = contentEle;
+
+                    pageModel.Elements = pageElements;
+                }
+            }
+
             pageModel.Attributes.Add("TestTime", System.DateTime.Now.ToString());
 
             return pageModel;
